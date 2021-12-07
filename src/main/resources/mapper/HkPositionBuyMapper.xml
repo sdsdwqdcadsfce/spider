@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.peait.spider.mapper.HkPositionBuyMapper">
+  <resultMap id="BaseResultMap" type="com.peait.spider.entity.HkPositionBuy">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="buy_price" jdbcType="DOUBLE" property="buyPrice" />
+    <result column="buy_date" jdbcType="DATE" property="buyDate" />
+    <result column="stock_code" jdbcType="VARCHAR" property="stockCode" />
+    <result column="stock_name" jdbcType="VARCHAR" property="stockName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, buy_price, buy_date, stock_code, stock_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from hk_postion_buy
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectData" resultType="java.util.HashMap">
+    select
+		((b.price-a.price)/a.price)*100 per ,b.stockCode stockCode ,b.stock_name
+    from (select avg(buy_price) price,stock_code from hk_postion_buy group by stock_code) a left join (		 select * from (
+
+        select t.stock_price price,t.stock_code stockCode,t.stock_name stock_name,
+        row_number()over(partition by stock_code order by postion_date desc) rn
+
+        from hk_postion_detail t
+
+        )a where a.rn=1 ) b on a.stock_code=b.stockCode order by per desc
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from hk_postion_buy
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.peait.spider.entity.HkPositionBuy">
+    insert into hk_postion_buy (id, buy_price, buy_date, 
+      stock_code, stock_name)
+    values (#{id,jdbcType=INTEGER}, #{buyPrice,jdbcType=DOUBLE}, #{buyDate,jdbcType=DATE}, 
+      #{stockCode,jdbcType=VARCHAR}, #{stockName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.peait.spider.entity.HkPositionBuy">
+    insert into hk_postion_buy
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="buyPrice != null">
+        buy_price,
+      </if>
+      <if test="buyDate != null">
+        buy_date,
+      </if>
+      <if test="stockCode != null">
+        stock_code,
+      </if>
+      <if test="stockName != null">
+        stock_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="buyPrice != null">
+        #{buyPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="buyDate != null">
+        #{buyDate,jdbcType=DATE},
+      </if>
+      <if test="stockCode != null">
+        #{stockCode,jdbcType=VARCHAR},
+      </if>
+      <if test="stockName != null">
+        #{stockName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.peait.spider.entity.HkPositionBuy">
+    update hk_postion_buy
+    <set>
+      <if test="buyPrice != null">
+        buy_price = #{buyPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="buyDate != null">
+        buy_date = #{buyDate,jdbcType=DATE},
+      </if>
+      <if test="stockCode != null">
+        stock_code = #{stockCode,jdbcType=VARCHAR},
+      </if>
+      <if test="stockName != null">
+        stock_name = #{stockName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.peait.spider.entity.HkPositionBuy">
+    update hk_postion_buy
+    set buy_price = #{buyPrice,jdbcType=DOUBLE},
+      buy_date = #{buyDate,jdbcType=DATE},
+      stock_code = #{stockCode,jdbcType=VARCHAR},
+      stock_name = #{stockName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

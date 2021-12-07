@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.peait.spider.mapper.HkPostionDetailMapper">
+    <resultMap id="BaseResultMap" type="com.peait.spider.entity.HkPostionDetail">
+        <result column="stock_code" jdbcType="VARCHAR" property="stockCode"/>
+        <result column="stock_name" jdbcType="VARCHAR" property="stockName"/>
+        <result column="stock_num" jdbcType="DOUBLE" property="stockNum"/>
+        <result column="stock_per" jdbcType="DOUBLE" property="stockPer"/>
+        <result column="stock_total_value" jdbcType="DOUBLE" property="stockTotalValue"/>
+        <result column="postion_date" jdbcType="VARCHAR" property="postionDate"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.peait.spider.entity.HkPostionDetail">
+    insert into hk_postion_detail (stock_code, stock_name, stock_num, 
+      stock_per, stock_total_value, postion_date
+      )
+      values (#{stockCode,jdbcType=VARCHAR}, #{stockName,jdbcType=VARCHAR}, #{stockNum,jdbcType=DOUBLE},
+      #{stockPer,jdbcType=DOUBLE}, #{stockTotalValue,jdbcType=DOUBLE}, #{postionDate,jdbcType=VARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.peait.spider.entity.HkPostionDetail">
+        insert into hk_postion_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stockCode != null">
+                stock_code,
+            </if>
+            <if test="stockName != null">
+                stock_name,
+            </if>
+            <if test="stockNum != null">
+                stock_num,
+            </if>
+            <if test="stockPer != null">
+                stock_per,
+            </if>
+            <if test="stockTotalValue != null">
+                stock_total_value,
+            </if>
+            <if test="postionDate != null">
+                postion_date,
+            </if>
+            <if test="stockPrice != null">
+                stock_price,
+            </if>
+            <if test="stockUp != null">
+                stock_up,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stockCode != null">
+                #{stockCode,jdbcType=VARCHAR},
+            </if>
+            <if test="stockName != null">
+                #{stockName,jdbcType=VARCHAR},
+            </if>
+            <if test="stockNum != null">
+                #{stockNum,jdbcType=DOUBLE},
+            </if>
+            <if test="stockPer != null">
+                #{stockPer,jdbcType=DOUBLE},
+            </if>
+            <if test="stockTotalValue != null">
+                #{stockTotalValue,jdbcType=DOUBLE},
+            </if>
+            <if test="postionDate != null">
+                #{postionDate,jdbcType=VARCHAR},
+            </if>
+            <if test="stockPrice != null">
+                #{stockPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="stockUp != null">
+                #{stockUp,jdbcType=DOUBLE},
+            </if>
+        </trim>
+    </insert>
+    <select id="hkPositionListMapper" resultType="com.peait.spider.entity.HkPositionList">
+    select  data_code  dataCode ,data_name dataName, data_time dataTime,data_url dataUrl
+     from hk_position_list where data_time &lt; date_format(#{date},'%Y-%m-%d') limit 10
+  </select>
+    <select id="selectDateByCode" resultType="java.lang.String">
+    SELECT postion_date FROM `hk_postion_detail` where stock_code=#{code}
+  </select>
+    <select id="selectDataByTime" resultType="com.peait.spider.entity.HkPositionDetailBO">
+
+    select a.* from (
+
+    select t.stock_code stockCode,t.stock_name stockName,t.stock_num stockNum,t.stock_per stockPer,l.data_url dataUrl,row_number()over(partition by stock_code   order by stock_name desc ) rn from hk_postion_detail t left join hk_position_list l on t.stock_code = l.data_code
+
+    )a where a.rn &lt;=5
+  </select>
+</mapper>

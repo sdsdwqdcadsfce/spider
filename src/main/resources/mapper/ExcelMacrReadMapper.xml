@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.peait.spider.mapper.ExcelMacrReadMapper">
+  <resultMap id="BaseResultMap" type="com.peait.spider.entity.ExcelMacrRead">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="DB_CITY" jdbcType="VARCHAR" property="dbCity" />
+    <result column="DB_DATE" jdbcType="VARCHAR" property="dbDate" />
+    <result column="FIRST_TYPE" jdbcType="VARCHAR" property="firstType" />
+    <result column="SECOND_TYPE" jdbcType="VARCHAR" property="secondType" />
+    <result column="THIRD_TYPE" jdbcType="VARCHAR" property="thirdType" />
+    <result column="FOURTH_TYPE" jdbcType="VARCHAR" property="fourthType" />
+    <result column="DATA_VALUE" jdbcType="VARCHAR" property="dataValue" />
+    <result column="DATA_INDEX" jdbcType="VARCHAR" property="dataIndex" />
+    <result column="ATACHEMENT_CONTENTID" jdbcType="VARCHAR" property="atachementContentid" />
+    <result column="DELETE" jdbcType="INTEGER" property="delete" />
+    <result column="BUSINESS_DATE" jdbcType="DATE" property="businessDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, DB_CITY, DB_DATE, FIRST_TYPE, SECOND_TYPE, THIRD_TYPE, FOURTH_TYPE, DATA_VALUE, 
+    DATA_INDEX, ATACHEMENT_CONTENTID, DELETE, BUSINESS_DATE
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T009_EXCEL_MACR_READ
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from T009_EXCEL_MACR_READ
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.peait.spider.entity.ExcelMacrRead">
+    insert into T009_EXCEL_MACR_READ (ID, DB_CITY, DB_DATE, 
+      FIRST_TYPE, SECOND_TYPE, THIRD_TYPE, 
+      FOURTH_TYPE, DATA_VALUE, DATA_INDEX, 
+      ATACHEMENT_CONTENTID, DELETE, BUSINESS_DATE
+      )
+    values (#{id,jdbcType=VARCHAR}, #{dbCity,jdbcType=VARCHAR}, #{dbDate,jdbcType=VARCHAR}, 
+      #{firstType,jdbcType=VARCHAR}, #{secondType,jdbcType=VARCHAR}, #{thirdType,jdbcType=VARCHAR}, 
+      #{fourthType,jdbcType=VARCHAR}, #{dataValue,jdbcType=VARCHAR}, #{dataIndex,jdbcType=VARCHAR}, 
+      #{atachementContentid,jdbcType=VARCHAR}, #{delete,jdbcType=INTEGER}, #{businessDate,jdbcType=DATE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.peait.spider.entity.ExcelMacrRead">
+    insert into T009_EXCEL_MACR_READ
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="dbCity != null">
+        DB_CITY,
+      </if>
+      <if test="dbDate != null">
+        DB_DATE,
+      </if>
+      <if test="firstType != null">
+        FIRST_TYPE,
+      </if>
+      <if test="secondType != null">
+        SECOND_TYPE,
+      </if>
+      <if test="thirdType != null">
+        THIRD_TYPE,
+      </if>
+      <if test="fourthType != null">
+        FOURTH_TYPE,
+      </if>
+      <if test="dataValue != null">
+        DATA_VALUE,
+      </if>
+      <if test="dataIndex != null">
+        DATA_INDEX,
+      </if>
+      <if test="atachementContentid != null">
+        ATACHEMENT_CONTENTID,
+      </if>
+      <if test="delete != null">
+        DELETE,
+      </if>
+      <if test="businessDate != null">
+        BUSINESS_DATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="dbCity != null">
+        #{dbCity,jdbcType=VARCHAR},
+      </if>
+      <if test="dbDate != null">
+        #{dbDate,jdbcType=VARCHAR},
+      </if>
+      <if test="firstType != null">
+        #{firstType,jdbcType=VARCHAR},
+      </if>
+      <if test="secondType != null">
+        #{secondType,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdType != null">
+        #{thirdType,jdbcType=VARCHAR},
+      </if>
+      <if test="fourthType != null">
+        #{fourthType,jdbcType=VARCHAR},
+      </if>
+      <if test="dataValue != null">
+        #{dataValue,jdbcType=VARCHAR},
+      </if>
+      <if test="dataIndex != null">
+        #{dataIndex,jdbcType=VARCHAR},
+      </if>
+      <if test="atachementContentid != null">
+        #{atachementContentid,jdbcType=VARCHAR},
+      </if>
+      <if test="delete != null">
+        #{delete,jdbcType=INTEGER},
+      </if>
+      <if test="businessDate != null">
+        #{businessDate,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.peait.spider.entity.ExcelMacrRead">
+    update T009_EXCEL_MACR_READ
+    <set>
+      <if test="dbCity != null">
+        DB_CITY = #{dbCity,jdbcType=VARCHAR},
+      </if>
+      <if test="dbDate != null">
+        DB_DATE = #{dbDate,jdbcType=VARCHAR},
+      </if>
+      <if test="firstType != null">
+        FIRST_TYPE = #{firstType,jdbcType=VARCHAR},
+      </if>
+      <if test="secondType != null">
+        SECOND_TYPE = #{secondType,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdType != null">
+        THIRD_TYPE = #{thirdType,jdbcType=VARCHAR},
+      </if>
+      <if test="fourthType != null">
+        FOURTH_TYPE = #{fourthType,jdbcType=VARCHAR},
+      </if>
+      <if test="dataValue != null">
+        DATA_VALUE = #{dataValue,jdbcType=VARCHAR},
+      </if>
+      <if test="dataIndex != null">
+        DATA_INDEX = #{dataIndex,jdbcType=VARCHAR},
+      </if>
+      <if test="atachementContentid != null">
+        ATACHEMENT_CONTENTID = #{atachementContentid,jdbcType=VARCHAR},
+      </if>
+      <if test="delete != null">
+        DELETE = #{delete,jdbcType=INTEGER},
+      </if>
+      <if test="businessDate != null">
+        BUSINESS_DATE = #{businessDate,jdbcType=DATE},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.peait.spider.entity.ExcelMacrRead">
+    update T009_EXCEL_MACR_READ
+    set DB_CITY = #{dbCity,jdbcType=VARCHAR},
+      DB_DATE = #{dbDate,jdbcType=VARCHAR},
+      FIRST_TYPE = #{firstType,jdbcType=VARCHAR},
+      SECOND_TYPE = #{secondType,jdbcType=VARCHAR},
+      THIRD_TYPE = #{thirdType,jdbcType=VARCHAR},
+      FOURTH_TYPE = #{fourthType,jdbcType=VARCHAR},
+      DATA_VALUE = #{dataValue,jdbcType=VARCHAR},
+      DATA_INDEX = #{dataIndex,jdbcType=VARCHAR},
+      ATACHEMENT_CONTENTID = #{atachementContentid,jdbcType=VARCHAR},
+      DELETE = #{delete,jdbcType=INTEGER},
+      BUSINESS_DATE = #{businessDate,jdbcType=DATE}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.peait.spider.mapper.HkPositionListMapper">
+    <resultMap id="BaseResultMap" type="com.peait.spider.entity.HkPositionList">
+        <result column="data_code" jdbcType="VARCHAR" property="dataCode"/>
+        <result column="data_name" jdbcType="VARCHAR" property="dataName"/>
+        <result column="data_time" jdbcType="VARCHAR" property="dataTime"/>
+        <result column="data_url" jdbcType="VARCHAR" property="dataUrl"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.peait.spider.entity.HkPositionList">
+    insert into hk_position_list (data_code, data_name, data_time, 
+      data_url)
+    values (#{dataCode,jdbcType=VARCHAR}, #{dataName,jdbcType=VARCHAR}, #{dataTime,jdbcType=VARCHAR}, 
+      #{dataUrl,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.peait.spider.entity.HkPositionList">
+        insert into hk_position_list
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dataCode != null">
+                data_code,
+            </if>
+            <if test="dataName != null">
+                data_name,
+            </if>
+            <if test="dataTime != null">
+                data_time,
+            </if>
+            <if test="dataUrl != null">
+                data_url,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dataCode != null">
+                #{dataCode,jdbcType=VARCHAR},
+            </if>
+            <if test="dataName != null">
+                #{dataName,jdbcType=VARCHAR},
+            </if>
+            <if test="dataTime != null">
+                #{dataTime,jdbcType=VARCHAR},
+            </if>
+            <if test="dataUrl != null">
+                #{dataUrl,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByCode">
+        update hk_position_list set data_time=#{nowDate}  where data_code=#{code}
+    </update>
+    <select id="selectAddressData" resultType="java.util.HashMap">
+select chrome_url chromeUrl,query_url queryUrl,table_xpath tableXpath,action_xPath actionXPath,detail_table_xpath detailXpath from  hk_xpath_url
+    </select>
+    <select id="selectCode" resultType="java.lang.String">
+        select data_code code from hk_position_list
+    </select>
+    <select id="getData" resultType="java.util.HashMap">
+        select price,date,stockCode,stockName,stockNum,stockPer,dataUrl from (
+
+        select t.stock_up,t.stock_price price,t.postion_date date,t.stock_code stockCode,t.stock_name stockName,t.stock_num stockNum,t.stock_per stockPer,l.data_url dataUrl,
+        lead(stock_per,0)over(partition by stock_code  order by postion_date desc) one,
+        lead(stock_per,1)over(partition by stock_code order by postion_date desc) yesterday,
+        lead(stock_per,7)over(partition by stock_code order by postion_date desc) seven,
+        lead(stock_per,15)over(partition by stock_code order by postion_date desc) fiveteen,
+        row_number()over(partition by stock_code order by postion_date desc) rn
+
+        from hk_postion_detail t left join hk_position_list l on t.stock_code = l.data_code
+
+        )a where a.rn=1 and one-yesterday>0.2  and    one-fiveteen>1.5 and one >3 and one &lt; 15
+    </select>
+</mapper>
