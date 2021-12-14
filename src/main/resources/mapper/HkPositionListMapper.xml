@@ -64,7 +64,7 @@ select chrome_url chromeUrl,query_url queryUrl,table_xpath tableXpath,action_xPa
         row_number()over(partition by stock_code order by postion_date desc) rn
 
         from hk_postion_detail t left join hk_position_list l on t.stock_code = l.data_code
-
+				where t.postion_date>= date_sub(curdate(),interval 30 day)
         )a where a.rn=1 and one-yesterday>0.2  and    one-fiveteen>1.5 and one >3 and one &lt; 15
     </select>
 </mapper>
