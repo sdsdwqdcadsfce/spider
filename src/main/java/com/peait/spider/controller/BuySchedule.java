@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 @EnableScheduling
 @Slf4j
 public class BuySchedule {
+
     @Resource
     private HkPositionListMapper hkPositionListMapper;
     @Resource
