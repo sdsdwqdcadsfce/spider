@@ -74,7 +74,7 @@
     </insert>
     <select id="hkPositionListMapper" resultType="com.peait.spider.entity.HkPositionList">
     select  data_code  dataCode ,data_name dataName, data_time dataTime,data_url dataUrl
-     from hk_position_list where data_time &lt; date_format(#{date},'%Y-%m-%d') limit 10
+     from hk_position_list where data_time &lt; date_format(#{date},'%Y-%m-%d') order by rand() limit 10
   </select>
     <select id="selectDateByCode" resultType="java.lang.String">
     SELECT postion_date FROM `hk_postion_detail` where stock_code=#{code}

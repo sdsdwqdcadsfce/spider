@@ -90,8 +90,8 @@ public class DfPageDetailSchedule {
                             try {
                                 stockPrice = Double.parseDouble(datareplis(dataArr[2]));
                                 stockUp = Double.parseDouble(datareplis(dataArr[3]));
-                            } catch (NumberFormatException e) {
-                                e.printStackTrace();
+                            } catch (Exception e) {
+                                log.error("出错"+hkPosition.getDataUrl());
                             }
                             HkPostionDetail hkPostionDetail = new HkPostionDetail();
                             hkPostionDetail.setStockCode(hkPosition.getDataCode());
@@ -118,12 +118,14 @@ public class DfPageDetailSchedule {
                         SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
                         String nowDate = simpleDateFormat1.format(new Date());
                         hkPositionListMapper.updateByCode(hkPosition.getDataCode(), nowDate);
-                    } catch (NumberFormatException e) {
+                    } catch (Exception e) {
                         errorNUm++;
                         webDriver.close();
                         webDriver.quit();
-                        e.printStackTrace();
+                        log.error("出错"+hkPosition.getDataUrl());
                     } finally {
+                        webDriver.close();
+                        webDriver.quit();
                     }
 
                 }
