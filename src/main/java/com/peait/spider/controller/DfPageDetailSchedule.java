@@ -124,8 +124,7 @@ public class DfPageDetailSchedule {
                         webDriver.quit();
                         log.error("出错"+hkPosition.getDataUrl());
                     } finally {
-                        webDriver.close();
-                        webDriver.quit();
+
                     }
 
                 }
