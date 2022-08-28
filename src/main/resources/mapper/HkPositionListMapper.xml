@@ -50,6 +50,11 @@
     <select id="selectAddressData" resultType="java.util.HashMap">
 select chrome_url chromeUrl,query_url queryUrl,table_xpath tableXpath,action_xPath actionXPath,detail_table_xpath detailXpath from  hk_xpath_url
     </select>
+
+    <select id="selectAddressDataById" resultType="java.util.HashMap">
+        select chrome_url chromeUrl,query_url queryUrl,table_xpath tableXpath,action_xPath actionXPath,detail_table_xpath detailXpath,  win_chrome_url win_chrome_url from  hk_xpath_url
+        where id=#{id}
+    </select>
     <select id="selectCode" resultType="java.lang.String">
         select data_code code from hk_position_list
     </select>
@@ -67,4 +72,5 @@ select chrome_url chromeUrl,query_url queryUrl,table_xpath tableXpath,action_xPa
 				where t.postion_date>= date_sub(curdate(),interval 30 day)
         )a where a.rn=1 and one-yesterday>0.2  and    one-fiveteen>1.5 and one >3 and one &lt; 15
     </select>
+
 </mapper>

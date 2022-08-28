@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.peait.spider.mapper.DfStockDetailMapper">
+  <resultMap id="BaseResultMap" type="com.peait.spider.entity.DfStockDetail">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="stock_code" jdbcType="VARCHAR" property="stockCode" />
+    <result column="stock_name" jdbcType="VARCHAR" property="stockName" />
+    <result column="stock_detail_url" jdbcType="VARCHAR" property="stockDetailUrl" />
+    <result column="stock_price" jdbcType="DECIMAL" property="stockPrice" />
+    <result column="fluctuation_ratio" jdbcType="VARCHAR" property="fluctuationRatio" />
+    <result column="turnover_ratio" jdbcType="VARCHAR" property="turnoverRatio" />
+    <result column="stock_pe" jdbcType="DECIMAL" property="stockPe" />
+    <result column="stock_pbr" jdbcType="DECIMAL" property="stockPbr" />
+    <result column="stock_industry1" jdbcType="VARCHAR" property="stockIndustry1" />
+    <result column="data_date" jdbcType="DATE" property="dataDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, stock_code, stock_name, stock_detail_url, stock_price, fluctuation_ratio, turnover_ratio, 
+    stock_pe, stock_pbr, stock_industry1, data_date
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from df_stock_detail
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from df_stock_detail
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.peait.spider.entity.DfStockDetail">
+    insert into df_stock_detail (id, stock_code, stock_name, 
+      stock_detail_url, stock_price, fluctuation_ratio, 
+      turnover_ratio, stock_pe, stock_pbr, 
+      stock_industry1, data_date)
+    values (#{id,jdbcType=VARCHAR}, #{stockCode,jdbcType=VARCHAR}, #{stockName,jdbcType=VARCHAR}, 
+      #{stockDetailUrl,jdbcType=VARCHAR}, #{stockPrice,jdbcType=DECIMAL}, #{fluctuationRatio,jdbcType=VARCHAR}, 
+      #{turnoverRatio,jdbcType=VARCHAR}, #{stockPe,jdbcType=DECIMAL}, #{stockPbr,jdbcType=DECIMAL}, 
+      #{stockIndustry1,jdbcType=VARCHAR}, #{dataDate,jdbcType=DATE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.peait.spider.entity.DfStockDetail">
+    insert into df_stock_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="stockCode != null">
+        stock_code,
+      </if>
+      <if test="stockName != null">
+        stock_name,
+      </if>
+      <if test="stockDetailUrl != null">
+        stock_detail_url,
+      </if>
+      <if test="stockPrice != null">
+        stock_price,
+      </if>
+      <if test="fluctuationRatio != null">
+        fluctuation_ratio,
+      </if>
+      <if test="turnoverRatio != null">
+        turnover_ratio,
+      </if>
+      <if test="stockPe != null">
+        stock_pe,
+      </if>
+      <if test="stockPbr != null">
+        stock_pbr,
+      </if>
+      <if test="stockIndustry1 != null">
+        stock_industry1,
+      </if>
+      <if test="dataDate != null">
+        data_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="stockCode != null">
+        #{stockCode,jdbcType=VARCHAR},
+      </if>
+      <if test="stockName != null">
+        #{stockName,jdbcType=VARCHAR},
+      </if>
+      <if test="stockDetailUrl != null">
+        #{stockDetailUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="stockPrice != null">
+        #{stockPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="fluctuationRatio != null">
+        #{fluctuationRatio,jdbcType=VARCHAR},
+      </if>
+      <if test="turnoverRatio != null">
+        #{turnoverRatio,jdbcType=VARCHAR},
+      </if>
+      <if test="stockPe != null">
+        #{stockPe,jdbcType=DECIMAL},
+      </if>
+      <if test="stockPbr != null">
+        #{stockPbr,jdbcType=DECIMAL},
+      </if>
+      <if test="stockIndustry1 != null">
+        #{stockIndustry1,jdbcType=VARCHAR},
+      </if>
+      <if test="dataDate != null">
+        #{dataDate,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.peait.spider.entity.DfStockDetail">
+    update df_stock_detail
+    <set>
+      <if test="stockCode != null">
+        stock_code = #{stockCode,jdbcType=VARCHAR},
+      </if>
+      <if test="stockName != null">
+        stock_name = #{stockName,jdbcType=VARCHAR},
+      </if>
+      <if test="stockDetailUrl != null">
+        stock_detail_url = #{stockDetailUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="stockPrice != null">
+        stock_price = #{stockPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="fluctuationRatio != null">
+        fluctuation_ratio = #{fluctuationRatio,jdbcType=VARCHAR},
+      </if>
+      <if test="turnoverRatio != null">
+        turnover_ratio = #{turnoverRatio,jdbcType=VARCHAR},
+      </if>
+      <if test="stockPe != null">
+        stock_pe = #{stockPe,jdbcType=DECIMAL},
+      </if>
+      <if test="stockPbr != null">
+        stock_pbr = #{stockPbr,jdbcType=DECIMAL},
+      </if>
+      <if test="stockIndustry1 != null">
+        stock_industry1 = #{stockIndustry1,jdbcType=VARCHAR},
+      </if>
+      <if test="dataDate != null">
+        data_date = #{dataDate,jdbcType=DATE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.peait.spider.entity.DfStockDetail">
+    update df_stock_detail
+    set stock_code = #{stockCode,jdbcType=VARCHAR},
+      stock_name = #{stockName,jdbcType=VARCHAR},
+      stock_detail_url = #{stockDetailUrl,jdbcType=VARCHAR},
+      stock_price = #{stockPrice,jdbcType=DECIMAL},
+      fluctuation_ratio = #{fluctuationRatio,jdbcType=VARCHAR},
+      turnover_ratio = #{turnoverRatio,jdbcType=VARCHAR},
+      stock_pe = #{stockPe,jdbcType=DECIMAL},
+      stock_pbr = #{stockPbr,jdbcType=DECIMAL},
+      stock_industry1 = #{stockIndustry1,jdbcType=VARCHAR},
+      data_date = #{dataDate,jdbcType=DATE}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

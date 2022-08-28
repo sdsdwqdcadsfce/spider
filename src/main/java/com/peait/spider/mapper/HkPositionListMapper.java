@@ -15,6 +15,8 @@ public interface HkPositionListMapper {
 
     HashMap<String, String> selectAddressData();
 
+    HashMap<String, String> selectAddressDataById(@Param("id")String id );
+
     List<String> selectCode();
 
     void updateByCode(@Param("code") String code,@Param("nowDate") String nowDate);
