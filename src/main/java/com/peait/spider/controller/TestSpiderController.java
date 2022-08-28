@@ -34,6 +34,8 @@ public class TestSpiderController {
     private DfPageDetailSchedule dfPageDetailSchedule;
     @Resource
     private HkPositionBuyMapper hkPositionBuyMapper;
+    @Autowired
+    private DfStockDetailSchedule dfStockDetailSchedule;
     @RequestMapping("/ping")
     public Result getPing(){
         return Result.success("成功");
@@ -53,6 +55,11 @@ public class TestSpiderController {
     public Result getbuy(){
         List<HashMap> hashMaps = hkPositionBuyMapper.selectData();
         return Result.success(hashMaps);
+    }
+    @RequestMapping("/stock")
+    public Result getStock() throws InterruptedException {
+        dfStockDetailSchedule.scheduler();
+        return Result.success("成功");
     }
 
 //    @RequestMapping("/list")
