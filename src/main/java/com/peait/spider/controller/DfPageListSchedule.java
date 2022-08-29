@@ -32,7 +32,7 @@ public class DfPageListSchedule {
     public void scheduler() throws InterruptedException {
         //获取文件路径 请求的文件地址 爬取的表格小path 爬取的数据xpath
         log.info("开始进入");
-        HashMap<String, String> dataMap = hkPositionListMapper.selectAddressData();
+        HashMap<String, String> dataMap = hkPositionListMapper.selectAddressDataById("hk_position_list");
         String queryUrl = dataMap.get("queryUrl");
         LocalDate now = LocalDate.now();
         LocalDate yestoday = now.minusDays(1);

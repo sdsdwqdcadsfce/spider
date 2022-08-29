@@ -52,7 +52,7 @@ public class DfPageDetailSchedule {
                     List<HkPostionDetail> dbList = new ArrayList<>();
 
                     //获取数据库配置的表格xpath
-                    HashMap<String, String> stringStringHashMap = hkPositionListMapper.selectAddressData();
+                    HashMap<String, String> stringStringHashMap = hkPositionListMapper.selectAddressDataById("hk_position_list");
                     WebDriver webDriver = null;
                     String[] lineList = new String[0];
 
