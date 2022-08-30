@@ -34,7 +34,7 @@ public class DfPageDetailSchedule {
     @Resource
     private HkPostionDetailMapper hkPostionDetailMapper;
 
-//    @Scheduled(cron = "0 0 5 ? * 1,2,3,4,5")
+    //    @Scheduled(cron = "0 0 5 ? * 1,2,3,4,5")
     public void getDataDetail() throws InterruptedException {
         //获取列表 获取小于当天日期的30条数据
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -87,12 +87,8 @@ public class DfPageDetailSchedule {
                             double postionPer = Double.parseDouble(datareplis(dataArr[6]));
                             double stockPrice = 0;
                             double stockUp = 0;
-                            try {
-                                stockPrice = Double.parseDouble(datareplis(dataArr[2]));
-                                stockUp = Double.parseDouble(datareplis(dataArr[3]));
-                            } catch (Exception e) {
-                                log.error("出错"+hkPosition.getDataUrl());
-                            }
+                            stockPrice = Double.parseDouble(datareplis(dataArr[2]));
+                            stockUp = Double.parseDouble(datareplis(dataArr[3]));
                             HkPostionDetail hkPostionDetail = new HkPostionDetail();
                             hkPostionDetail.setStockCode(hkPosition.getDataCode());
                             hkPostionDetail.setStockName(hkPosition.getDataName());
@@ -122,7 +118,8 @@ public class DfPageDetailSchedule {
                         errorNUm++;
                         webDriver.close();
                         webDriver.quit();
-                        log.error("出错"+hkPosition.getDataUrl());
+                        log.error("出错" + hkPosition.getDataUrl());
+                        continue;
                     } finally {
 
                     }
