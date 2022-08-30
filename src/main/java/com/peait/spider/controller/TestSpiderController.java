@@ -27,7 +27,8 @@ import java.util.stream.Collectors;
 public class TestSpiderController {
     @Resource
     private HkPositionListMapper hkPositionListMapper;
-
+    @Resource
+    private BuySchedule buySchedule;
     @Autowired
     private DfPageListSchedule dfPageListSchedule;
     @Autowired
@@ -43,6 +44,17 @@ public class TestSpiderController {
     @RequestMapping("/detail")
     public Result getDetail() throws InterruptedException {
         dfPageDetailSchedule.getDataDetail();
+        return Result.success("成功");
+    }
+
+    @RequestMapping("/list")
+    public Result getList() throws InterruptedException {
+        dfPageListSchedule.scheduler();
+        return Result.success("成功");
+    }
+    @RequestMapping("/buy/schedule")
+    public Result getBuySchedule() throws InterruptedException {
+        buySchedule.getDataDetail();
         return Result.success("成功");
     }
     @RequestMapping("/data")

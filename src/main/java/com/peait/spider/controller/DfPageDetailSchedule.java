@@ -34,7 +34,7 @@ public class DfPageDetailSchedule {
     @Resource
     private HkPostionDetailMapper hkPostionDetailMapper;
 
-    @Scheduled(cron = "0 0 5 ? * 1,2,3,4,5")
+//    @Scheduled(cron = "0 0 5 ? * 1,2,3,4,5")
     public void getDataDetail() throws InterruptedException {
         //获取列表 获取小于当天日期的30条数据
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");

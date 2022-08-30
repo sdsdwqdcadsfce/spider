@@ -29,7 +29,7 @@ public class DfStockDetailSchedule {
     private DfStockDetailMapper dfStockDetailMapper;
 
     //    @Scheduled(cron = "0 0 1 ? * 6 ")
-    @Scheduled(cron = "0 0 20 ? * *")
+//    @Scheduled(cron = "0 0 20 ? * *")
     public void scheduler() throws InterruptedException {
         //获取文件路径 请求的文件地址 爬取的表格小path 爬取的数据xpath
         log.info("开始进入");

@@ -37,7 +37,7 @@ public class BuySchedule {
     @Resource
     private HkPositionBuyMapper hkPositionBuyMapper;
 
-    @Scheduled(cron = "0 0 18 ? * 1,2,3,4,5")
+//    @Scheduled(cron = "0 0 18 ? * 1,2,3,4,5")
 //    @Scheduled(cron = "0 */1 * * * ?")
     public void getDataDetail() throws InterruptedException {
         List<HashMap> dataMap = hkPositionListMapper.getData();
