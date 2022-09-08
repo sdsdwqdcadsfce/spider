@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.peait.spider.mapper.GjCityMapper">
+  <resultMap id="BaseResultMap" type="com.peait.spider.entity.GjCity">
+    <id column="city_id" jdbcType="VARCHAR" property="cityId" />
+    <result column="province_id" jdbcType="VARCHAR" property="provinceId" />
+    <result column="city_name" jdbcType="VARCHAR" property="cityName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    city_id, province_id, city_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from gj_city
+    where city_id = #{cityId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from gj_city
+    where city_id = #{cityId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.peait.spider.entity.GjCity">
+    insert into gj_city (city_id, province_id, city_name
+      )
+    values (#{cityId,jdbcType=VARCHAR}, #{provinceId,jdbcType=VARCHAR}, #{cityName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.peait.spider.entity.GjCity">
+    insert into gj_city
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="cityId != null">
+        city_id,
+      </if>
+      <if test="provinceId != null">
+        province_id,
+      </if>
+      <if test="cityName != null">
+        city_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="cityId != null">
+        #{cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceId != null">
+        #{provinceId,jdbcType=VARCHAR},
+      </if>
+      <if test="cityName != null">
+        #{cityName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.peait.spider.entity.GjCity">
+    update gj_city
+    <set>
+      <if test="provinceId != null">
+        province_id = #{provinceId,jdbcType=VARCHAR},
+      </if>
+      <if test="cityName != null">
+        city_name = #{cityName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where city_id = #{cityId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.peait.spider.entity.GjCity">
+    update gj_city
+    set province_id = #{provinceId,jdbcType=VARCHAR},
+      city_name = #{cityName,jdbcType=VARCHAR}
+    where city_id = #{cityId,jdbcType=VARCHAR}
+  </update>
+</mapper>

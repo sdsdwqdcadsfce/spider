@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.peait.spider.mapper.GjVillagetrMapper">
+  <resultMap id="BaseResultMap" type="com.peait.spider.entity.GjVillagetr">
+    <id column="villagetr_id" jdbcType="VARCHAR" property="villagetrId" />
+    <result column="street_id" jdbcType="VARCHAR" property="streetId" />
+    <result column="villagetr_name" jdbcType="VARCHAR" property="villagetrName" />
+    <result column="villagetr_type_code" jdbcType="VARCHAR" property="villagetrTypeCode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    villagetr_id, street_id, villagetr_name, villagetr_type_code
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from gj_villagetr
+    where villagetr_id = #{villagetrId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from gj_villagetr
+    where villagetr_id = #{villagetrId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.peait.spider.entity.GjVillagetr">
+    insert into gj_villagetr (villagetr_id, street_id, villagetr_name, 
+      villagetr_type_code)
+    values (#{villagetrId,jdbcType=VARCHAR}, #{streetId,jdbcType=VARCHAR}, #{villagetrName,jdbcType=VARCHAR}, 
+      #{villagetrTypeCode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.peait.spider.entity.GjVillagetr">
+    insert into gj_villagetr
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="villagetrId != null">
+        villagetr_id,
+      </if>
+      <if test="streetId != null">
+        street_id,
+      </if>
+      <if test="villagetrName != null">
+        villagetr_name,
+      </if>
+      <if test="villagetrTypeCode != null">
+        villagetr_type_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="villagetrId != null">
+        #{villagetrId,jdbcType=VARCHAR},
+      </if>
+      <if test="streetId != null">
+        #{streetId,jdbcType=VARCHAR},
+      </if>
+      <if test="villagetrName != null">
+        #{villagetrName,jdbcType=VARCHAR},
+      </if>
+      <if test="villagetrTypeCode != null">
+        #{villagetrTypeCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.peait.spider.entity.GjVillagetr">
+    update gj_villagetr
+    <set>
+      <if test="streetId != null">
+        street_id = #{streetId,jdbcType=VARCHAR},
+      </if>
+      <if test="villagetrName != null">
+        villagetr_name = #{villagetrName,jdbcType=VARCHAR},
+      </if>
+      <if test="villagetrTypeCode != null">
+        villagetr_type_code = #{villagetrTypeCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where villagetr_id = #{villagetrId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.peait.spider.entity.GjVillagetr">
+    update gj_villagetr
+    set street_id = #{streetId,jdbcType=VARCHAR},
+      villagetr_name = #{villagetrName,jdbcType=VARCHAR},
+      villagetr_type_code = #{villagetrTypeCode,jdbcType=VARCHAR}
+    where villagetr_id = #{villagetrId,jdbcType=VARCHAR}
+  </update>
+</mapper>

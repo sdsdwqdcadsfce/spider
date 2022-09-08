@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
 <generatorConfiguration>
 
-    <classPathEntry location="C:\project\git\spider\src\main\resources\jenerator\mysql-connector-java-8.0.22.jar"/>
+    <classPathEntry location="C:\project\spider\src\main\resources\jenerator\mysql-connector-java-8.0.22.jar"/>
 
     <context id="DB2Tables" targetRuntime="MyBatis3">
         <commentGenerator>
@@ -28,19 +28,20 @@
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
 
-        <javaModelGenerator targetPackage="com.peait.spider.entity" targetProject="C:\project\git\spider\src\main\java">
+        <javaModelGenerator targetPackage="com.peait.spider.entity" targetProject="C:\project\spider\src\main\java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
-        <sqlMapGenerator targetPackage="resources.mapper" targetProject="C:\project\git\spider\src\main">
+        <sqlMapGenerator targetPackage="resources.mapper" targetProject="C:\project\spider\src\main">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
-        <javaClientGenerator targetPackage="com.peait.spider.mapper" type="XMLMAPPER" targetProject="C:\project\git\spider\src\main\java">
+        <javaClientGenerator targetPackage="com.peait.spider.mapper" type="XMLMAPPER" targetProject="C:\project\spider\src\main\java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table domainObjectName="DfStockDetail" tableName="df_stock_detail" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+<!--        java -jar mybatis-generator-core-1.3.5.jar -configfile generatorConfig.xml -overwrite-->
+        <table domainObjectName="GjVillagetr" tableName="gj_villagetr" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
     </context>
 </generatorConfiguration>
