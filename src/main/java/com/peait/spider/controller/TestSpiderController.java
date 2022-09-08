@@ -37,6 +37,16 @@ public class TestSpiderController {
     private HkPositionBuyMapper hkPositionBuyMapper;
     @Autowired
     private DfStockDetailSchedule dfStockDetailSchedule;
+
+    @Autowired
+    private GJDistrictDetailSchedule gjDistrictDetailSchedule;
+
+    @RequestMapping("/area")
+    public Result getAreaData() throws InterruptedException {
+        gjDistrictDetailSchedule.scheduler();
+        return Result.success("成功");
+    }
+
     @RequestMapping("/ping")
     public Result getPing(){
         return Result.success("成功");
