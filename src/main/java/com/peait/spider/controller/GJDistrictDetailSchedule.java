@@ -67,7 +67,7 @@ public class GJDistrictDetailSchedule {
     }
 
     public WebDriver openWebDriver(String chromeUrl, String queryUrl) {
-        chromeUrl = "C:\\Users\\10040\\AppData\\Local\\Google\\Chrome\\Application\\chromedriver.exe";
+//        chromeUrl = "C:\\Users\\10040\\AppData\\Local\\Google\\Chrome\\Application\\chromedriver.exe";
         System.getProperties().setProperty("webdriver.chrome.driver", chromeUrl);
 //        System.getProperties().setProperty("webdriver.chrome.driver", dataMap.get("win_chrome_url"));
         ChromeOptions chromeOptions = new ChromeOptions();
