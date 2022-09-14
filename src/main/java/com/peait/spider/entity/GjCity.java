@@ -10,5 +10,9 @@ public class GjCity {
 
     private String cityName;
 
+    private String queryUrl;
+
+    private Integer updateStatus;
+
 
 }

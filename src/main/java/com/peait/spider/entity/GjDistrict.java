@@ -10,4 +10,9 @@ public class GjDistrict {
 
     private String districtName;
 
+    private String queryUrl;
+
+    private Integer updateStatus;
+
+
 }

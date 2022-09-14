@@ -17,6 +17,7 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @EnableScheduling
@@ -49,6 +50,7 @@ public class GJDistrictDetailSchedule {
         HashMap<String, String> dataMap = hkPositionListMapper.selectAddressDataById("gj_area_detail");
         String chromeUrl = dataMap.get("chromeUrl");
         String queryUrl = dataMap.get("queryUrl");
+
         WebDriver webDriver = this.openWebDriver(chromeUrl, queryUrl);
         String tableXpath = dataMap.get("tableXpath");
         String actionXPath = dataMap.get("actionXPath");
@@ -61,18 +63,21 @@ public class GJDistrictDetailSchedule {
         }
         log.error("程序退出");
         closeWebDriver(webDriver);
+
     }
 
     public WebDriver openWebDriver(String chromeUrl, String queryUrl) {
+        chromeUrl = "C:\\Users\\10040\\AppData\\Local\\Google\\Chrome\\Application\\chromedriver.exe";
         System.getProperties().setProperty("webdriver.chrome.driver", chromeUrl);
 //        System.getProperties().setProperty("webdriver.chrome.driver", dataMap.get("win_chrome_url"));
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("-headless");
         chromeOptions.addArguments("no-sandbox");
         ChromeDriver webDriver = new ChromeDriver(chromeOptions);
+        webDriver.manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
         webDriver.get(queryUrl);
         try {
-            Thread.sleep(5000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -86,11 +91,9 @@ public class GJDistrictDetailSchedule {
     }
 
     private void spiderData(WebDriver driver, String chromeUrl, String tableXpath, String actionXPath, int numCount) throws InterruptedException {
-        Thread.sleep(10000);
         WebElement tableElement = driver.findElement(By.xpath(tableXpath));
         List<WebElement> tr = tableElement.findElements(By.xpath("tr"));
         //省列表
-        LinkedHashMap<String, String> provinceMap = new LinkedHashMap<>();
         for (int i = 0; i < tr.size(); i++) {
             WebElement webElement = tr.get(i);
             log.error("获取到的class内容" + webElement.getAttribute("class"));
@@ -100,29 +103,30 @@ public class GJDistrictDetailSchedule {
                     WebElement provinceA = provinceElement.findElement(By.xpath("a"));
                     String provinceHref = provinceA.getAttribute("href");
                     String provinceName = StringUtils.replace(provinceA.getText(), "\"", "");
-                    provinceMap.put(provinceHref, provinceName);
                     //新增省的数据
                     GjProvince gjProvince = new GjProvince();
                     gjProvince.setProvinceId(provinceName);
                     gjProvince.setProvinceName(provinceName);
-                    gjProvinceMapper.insertSelective(gjProvince);
+                    gjProvince.setQueryUrl(provinceHref);
+                    gjProvince.setUpdateStatus(0);
+                    GjProvince gjProvince1 = gjProvinceMapper.selectByPrimaryKey(provinceName);
+                    if(gjProvince1==null || gjProvince1.getUpdateStatus()==0){
+                        gjProvinceMapper.deleteByPrimaryKey(provinceName);
+                        gjProvinceMapper.insertSelective(gjProvince);
+                    }
                 }
             }
 
         }
         closeWebDriver(driver);
         //省结束，开始市区的查询
-        queryCityData(provinceMap, chromeUrl);
-
-
+        List<GjProvince> gjProvinces = gjProvinceMapper.selectByUpdateStatus();
+        queryCityData(gjProvinces, chromeUrl);
     }
 
-    private void queryCityData(LinkedHashMap<String, String> provinceMap, String chromeUrl) {
-        Set<String> provinceHrefSet = provinceMap.keySet();
-        //初始化一个citylist
-        LinkedHashMap<String, String> cityMap = new LinkedHashMap<>();
-        for (String provinceHref : provinceHrefSet) {
-            WebDriver webDriver = this.openWebDriver(chromeUrl, provinceHref);
+    private void queryCityData(List<GjProvince> gjProvinces, String chromeUrl) {
+        for (GjProvince gjProvince : gjProvinces) {
+            WebDriver webDriver = this.openWebDriver(chromeUrl, gjProvince.getQueryUrl());
             WebElement table = webDriver.findElement(By.xpath("/html/body/table[2]/tbody/tr[1]/td/table/tbody/tr[2]/td/table/tbody/tr/td/table/tbody"));
             List<WebElement> trList = table.findElements(By.xpath("tr"));
             for (WebElement tr : trList) {
@@ -132,62 +136,75 @@ public class GJDistrictDetailSchedule {
                     String cityCode = tdList.get(0).findElement(By.xpath("a")).getText();
                     String cityName = tdList.get(1).findElement(By.xpath("a")).getText();
                     GjCity gjCity = new GjCity();
-                    gjCity.setProvinceId(provinceMap.get(provinceHref));
+                    gjCity.setProvinceId(gjProvince.getProvinceId());
                     gjCity.setCityId(cityCode);
                     gjCity.setCityName(cityName);
-                    gjCityMapper.insertSelective(gjCity);
-                    cityMap.put(cityHref, cityCode);
+                    gjCity.setQueryUrl(cityHref);
+                    gjCity.setUpdateStatus(0);
+                    GjCity gjCity1 = gjCityMapper.selectByPrimaryKey(cityCode);
+                    if(gjCity1==null || gjCity1.getUpdateStatus()==0){
+                        gjCityMapper.deleteByPrimaryKey(cityCode);
+                        gjCityMapper.insertSelective(gjCity);
+                    }
                 }
             }
             closeWebDriver(webDriver);
+            gjProvince.setUpdateStatus(1);
+            gjProvinceMapper.updateByPrimaryKeySelective(gjProvince);
         }
         //市结束，开始区
-        queryDistrictData(cityMap, chromeUrl);
+        List<GjCity> gjCities = gjCityMapper.selectByUpdateStatus();
+        queryDistrictData(gjCities, chromeUrl);
     }
 
-    private void queryDistrictData(LinkedHashMap<String, String> cityMap, String chromeUrl) {
-        Set<String> cityHrefSet = cityMap.keySet();
-        //初始化一个citylist
-        LinkedHashMap<String, String> districtMap = new LinkedHashMap<>();
-        for (String cityHref : cityHrefSet) {
-            WebDriver webDriver = this.openWebDriver(chromeUrl, cityHref);
+    private void queryDistrictData( List<GjCity> gjCities , String chromeUrl) {
+        for (GjCity gjCity : gjCities) {
+            WebDriver webDriver = this.openWebDriver(chromeUrl, gjCity.getQueryUrl());
             WebElement table = webDriver.findElement(By.xpath("/html/body/table[2]/tbody/tr[1]/td/table/tbody/tr[2]/td/table/tbody/tr/td/table/tbody"));
             List<WebElement> trList = table.findElements(By.xpath("tr"));
             for (WebElement tr : trList) {
                 if (tr.getAttribute("class").equals("countytr")) {
                     List<WebElement> tdList = tr.findElements(By.xpath("td"));
-                    if (tdList.get(0).findElement(By.xpath("a")) == null || tdList.get(0).findElement(By.xpath("a")).getText() == null) {
-                        GjDistrict gjDistrict = new GjDistrict();
-                        gjDistrict.setCityId(cityMap.get(cityHref));
-                        gjDistrict.setDistrictId(tdList.get(0).getText());
-                        gjDistrict.setDistrictName(tdList.get(1).getText());
-                        gjDistrictMapper.insertSelective(gjDistrict);
-                        continue;
-                    } else {
+                    try {
                         String districtHref = tdList.get(0).findElement(By.xpath("a")).getAttribute("href");
                         String districtCode = tdList.get(0).findElement(By.xpath("a")).getText();
                         String districtName = tdList.get(1).findElement(By.xpath("a")).getText();
                         GjDistrict gjDistrict = new GjDistrict();
-                        gjDistrict.setCityId(cityMap.get(cityHref));
+                        gjDistrict.setCityId(gjCity.getCityId());
                         gjDistrict.setDistrictId(districtCode);
                         gjDistrict.setDistrictName(districtName);
-                        districtMap.put(districtHref, districtCode);
+                        gjDistrict.setQueryUrl(districtHref);
+                        gjDistrict.setUpdateStatus(0);
+                        GjDistrict gjDistrict1 = gjDistrictMapper.selectByPrimaryKey(districtCode);
+                        if(gjDistrict1==null || gjDistrict1.getUpdateStatus()==0){
+                            gjDistrictMapper.deleteByPrimaryKey(districtCode);
+                            gjDistrictMapper.insertSelective(gjDistrict);
+                        }
+                    } catch (Exception e) {
+                        GjDistrict gjDistrict = new GjDistrict();
+                        gjDistrict.setCityId(gjCity.getCityId());
+                        gjDistrict.setDistrictId(tdList.get(0).getText());
+                        gjDistrict.setDistrictName(tdList.get(1).getText());
+                        gjDistrict.setQueryUrl("");
+                        gjDistrict.setUpdateStatus(1);
+                        gjDistrictMapper.deleteByPrimaryKey(tdList.get(0).getText());
                         gjDistrictMapper.insertSelective(gjDistrict);
                     }
+
                 }
             }
             closeWebDriver(webDriver);
+            gjCity.setUpdateStatus(1);
+            gjCityMapper.updateByPrimaryKeySelective(gjCity);
         }
         //区结束，开始街道
-        queryStreetData(districtMap, chromeUrl);
+        List<GjDistrict> districts = gjDistrictMapper.selectByUpdateStatus();
+        queryStreetData(districts, chromeUrl);
     }
 
-    private void queryStreetData(LinkedHashMap<String, String> districtMap, String chromeUrl) {
-        Set<String> districtHrefSet = districtMap.keySet();
-        //初始化一个citylist
-        LinkedHashMap<String, String> streetMap = new LinkedHashMap<>();
-        for (String districtHref : districtHrefSet) {
-            WebDriver webDriver = this.openWebDriver(chromeUrl, districtHref);
+    private void queryStreetData( List<GjDistrict>  districts, String chromeUrl) {
+        for (GjDistrict gjDistrict : districts) {
+            WebDriver webDriver = this.openWebDriver(chromeUrl, gjDistrict.getQueryUrl());
             WebElement table = webDriver.findElement(By.xpath("/html/body/table[2]/tbody/tr[1]/td/table/tbody/tr[2]/td/table/tbody/tr/td/table/tbody"));
             List<WebElement> trList = table.findElements(By.xpath("tr"));
             for (WebElement tr : trList) {
@@ -197,40 +214,50 @@ public class GJDistrictDetailSchedule {
                     String streetCode = tdList.get(0).findElement(By.xpath("a")).getText();
                     String streetName = tdList.get(1).findElement(By.xpath("a")).getText();
                     GjStreet gjStreet = new GjStreet();
-                    gjStreet.setDistrictId(districtMap.get(districtHref));
+                    gjStreet.setDistrictId(gjDistrict.getDistrictId());
                     gjStreet.setStreetId(streetCode);
                     gjStreet.setStreetName(streetName);
-                    gjStreetMapper.insertSelective(gjStreet);
-                    streetMap.put(streetHref, streetCode);
+                    gjStreet.setQueryUrl(streetHref);
+                    gjStreet.setUpdateStatus(0);
+                    GjStreet gjStreet1 = gjStreetMapper.selectByPrimaryKey(streetCode);
+                    if(gjStreet1==null || gjStreet1.getUpdateStatus()==0){
+                        gjStreetMapper.deleteByPrimaryKey(streetCode);
+                        gjStreetMapper.insertSelective(gjStreet);
+                    }
                 }
             }
             closeWebDriver(webDriver);
+            gjDistrict.setUpdateStatus(1);
+            gjDistrictMapper.updateByPrimaryKeySelective(gjDistrict);
         }
         //街道结束，开始居委会
-        queryVillagetrData(streetMap, chromeUrl);
+        List<GjStreet> streets = gjStreetMapper.selectByUpdateStatus();
+        queryVillagetrData(streets, chromeUrl);
     }
 
-    private void queryVillagetrData(LinkedHashMap<String, String> streetMap, String chromeUrl) {
-        Set<String> streetHrefSet = streetMap.keySet();
-        //初始化一个citylist
-        for (String streetHref : streetHrefSet) {
-            WebDriver webDriver = this.openWebDriver(chromeUrl, streetHref);
+    private void queryVillagetrData(List<GjStreet> streets, String chromeUrl) {
+
+        for (GjStreet gjStreet : streets) {
+            WebDriver webDriver = this.openWebDriver(chromeUrl, gjStreet.getQueryUrl());
             WebElement table = webDriver.findElement(By.xpath("/html/body/table[2]/tbody/tr[1]/td/table/tbody/tr[2]/td/table/tbody/tr/td/table/tbody"));
             List<WebElement> trList = table.findElements(By.xpath("tr"));
             for (WebElement tr : trList) {
                 if (tr.getAttribute("class").equals("villagetr")) {
                     List<WebElement> tdList = tr.findElements(By.xpath("td"));
-                    String villId = tdList.get(0).findElement(By.xpath("a")).getText();
-                    String villTypeCode = tdList.get(1).findElement(By.xpath("a")).getText();
-                    String villName = tdList.get(2).findElement(By.xpath("a")).getText();
+                    String villId = tdList.get(0).getText();
+                    String villTypeCode = tdList.get(1).getText();
+                    String villName = tdList.get(2).getText();
                     GjVillagetr gjVillagetr = new GjVillagetr();
-                    gjVillagetr.setStreetId(streetMap.get(streetHref));
+                    gjVillagetr.setStreetId(gjStreet.getStreetId());
                     gjVillagetr.setVillagetrId(villId);
                     gjVillagetr.setVillagetrTypeCode(villTypeCode);
                     gjVillagetr.setVillagetrName(villName);
+                    gjVillagetrMapper.deleteByPrimaryKey(villId);
                     gjVillagetrMapper.insertSelective(gjVillagetr);
                 }
             }
+            gjStreet.setUpdateStatus(1);
+            gjStreetMapper.updateByPrimaryKeySelective(gjStreet);
             closeWebDriver(webDriver);
         }
 

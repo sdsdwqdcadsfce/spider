@@ -3,6 +3,8 @@ package com.peait.spider.mapper;
 import com.peait.spider.entity.GjProvince;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface GjProvinceMapper {
     int deleteByPrimaryKey(String provinceId);
@@ -16,4 +18,6 @@ public interface GjProvinceMapper {
     int updateByPrimaryKeySelective(GjProvince record);
 
     int updateByPrimaryKey(GjProvince record);
+
+    List<GjProvince> selectByUpdateStatus();
 }

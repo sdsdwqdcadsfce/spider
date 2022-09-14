@@ -5,9 +5,11 @@
     <id column="street_id" jdbcType="VARCHAR" property="streetId" />
     <result column="district_id" jdbcType="VARCHAR" property="districtId" />
     <result column="street_name" jdbcType="VARCHAR" property="streetName" />
+    <result column="update_status" jdbcType="INTEGER" property="updateStatus" />
+    <result column="query_url" jdbcType="VARCHAR" property="queryUrl" />
   </resultMap>
   <sql id="Base_Column_List">
-    street_id, district_id, street_name
+    street_id, district_id, street_name, update_status, query_url
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -15,15 +17,21 @@
     from gj_street
     where street_id = #{streetId,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <select id="selectByUpdateStatus" resultType="com.peait.spider.entity.GjStreet">
+      select
+      <include refid="Base_Column_List" />
+      from gj_street
+      where update_status = 0
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from gj_street
     where street_id = #{streetId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.peait.spider.entity.GjStreet">
-    insert into gj_street (street_id, district_id, street_name
-      )
-    values (#{streetId,jdbcType=VARCHAR}, #{districtId,jdbcType=VARCHAR}, #{streetName,jdbcType=VARCHAR}
-      )
+    insert into gj_street (street_id, district_id, street_name, 
+      update_status, query_url)
+    values (#{streetId,jdbcType=VARCHAR}, #{districtId,jdbcType=VARCHAR}, #{streetName,jdbcType=VARCHAR}, 
+      #{updateStatus,jdbcType=INTEGER}, #{queryUrl,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.peait.spider.entity.GjStreet">
     insert into gj_street
@@ -37,6 +45,12 @@
       <if test="streetName != null">
         street_name,
       </if>
+      <if test="updateStatus != null">
+        update_status,
+      </if>
+      <if test="queryUrl != null">
+        query_url,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="streetId != null">
@@ -47,6 +61,12 @@
       </if>
       <if test="streetName != null">
         #{streetName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateStatus != null">
+        #{updateStatus,jdbcType=INTEGER},
+      </if>
+      <if test="queryUrl != null">
+        #{queryUrl,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -59,13 +79,21 @@
       <if test="streetName != null">
         street_name = #{streetName,jdbcType=VARCHAR},
       </if>
+      <if test="updateStatus != null">
+        update_status = #{updateStatus,jdbcType=INTEGER},
+      </if>
+      <if test="queryUrl != null">
+        query_url = #{queryUrl,jdbcType=VARCHAR},
+      </if>
     </set>
     where street_id = #{streetId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.peait.spider.entity.GjStreet">
     update gj_street
     set district_id = #{districtId,jdbcType=VARCHAR},
-      street_name = #{streetName,jdbcType=VARCHAR}
+      street_name = #{streetName,jdbcType=VARCHAR},
+      update_status = #{updateStatus,jdbcType=INTEGER},
+      query_url = #{queryUrl,jdbcType=VARCHAR}
     where street_id = #{streetId,jdbcType=VARCHAR}
   </update>
 </mapper>

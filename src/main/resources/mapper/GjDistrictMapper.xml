@@ -5,9 +5,11 @@
     <id column="district_id" jdbcType="VARCHAR" property="districtId" />
     <result column="city_id" jdbcType="VARCHAR" property="cityId" />
     <result column="district_name" jdbcType="VARCHAR" property="districtName" />
+    <result column="query_url" jdbcType="VARCHAR" property="queryUrl" />
+    <result column="update_status" jdbcType="INTEGER" property="updateStatus" />
   </resultMap>
   <sql id="Base_Column_List">
-    district_id, city_id, district_name
+    district_id, city_id, district_name, query_url, update_status
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -15,15 +17,21 @@
     from gj_district
     where district_id = #{districtId,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <select id="selectByUpdateStatus" resultType="com.peait.spider.entity.GjDistrict">
+      select
+      <include refid="Base_Column_List" />
+      from gj_district
+      where update_status =0
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from gj_district
     where district_id = #{districtId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.peait.spider.entity.GjDistrict">
-    insert into gj_district (district_id, city_id, district_name
-      )
-    values (#{districtId,jdbcType=VARCHAR}, #{cityId,jdbcType=VARCHAR}, #{districtName,jdbcType=VARCHAR}
-      )
+    insert into gj_district (district_id, city_id, district_name, 
+      query_url, update_status)
+    values (#{districtId,jdbcType=VARCHAR}, #{cityId,jdbcType=VARCHAR}, #{districtName,jdbcType=VARCHAR}, 
+      #{queryUrl,jdbcType=VARCHAR}, #{updateStatus,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.peait.spider.entity.GjDistrict">
     insert into gj_district
@@ -37,6 +45,12 @@
       <if test="districtName != null">
         district_name,
       </if>
+      <if test="queryUrl != null">
+        query_url,
+      </if>
+      <if test="updateStatus != null">
+        update_status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="districtId != null">
@@ -47,6 +61,12 @@
       </if>
       <if test="districtName != null">
         #{districtName,jdbcType=VARCHAR},
+      </if>
+      <if test="queryUrl != null">
+        #{queryUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="updateStatus != null">
+        #{updateStatus,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -59,13 +79,21 @@
       <if test="districtName != null">
         district_name = #{districtName,jdbcType=VARCHAR},
       </if>
+      <if test="queryUrl != null">
+        query_url = #{queryUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="updateStatus != null">
+        update_status = #{updateStatus,jdbcType=INTEGER},
+      </if>
     </set>
     where district_id = #{districtId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.peait.spider.entity.GjDistrict">
     update gj_district
     set city_id = #{cityId,jdbcType=VARCHAR},
-      district_name = #{districtName,jdbcType=VARCHAR}
+      district_name = #{districtName,jdbcType=VARCHAR},
+      query_url = #{queryUrl,jdbcType=VARCHAR},
+      update_status = #{updateStatus,jdbcType=INTEGER}
     where district_id = #{districtId,jdbcType=VARCHAR}
   </update>
 </mapper>

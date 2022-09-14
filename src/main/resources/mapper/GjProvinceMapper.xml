@@ -4,9 +4,11 @@
   <resultMap id="BaseResultMap" type="com.peait.spider.entity.GjProvince">
     <id column="province_id" jdbcType="VARCHAR" property="provinceId" />
     <result column="province_name" jdbcType="VARCHAR" property="provinceName" />
+    <result column="update_status" jdbcType="INTEGER" property="updateStatus" />
+    <result column="query_url" jdbcType="VARCHAR" property="queryUrl" />
   </resultMap>
   <sql id="Base_Column_List">
-    province_id, province_name
+    province_id, province_name, update_status, query_url
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -14,13 +16,21 @@
     from gj_province
     where province_id = #{provinceId,jdbcType=VARCHAR}
   </select>
+  <select id="selectByUpdateStatus"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from gj_province
+    where update_status=0
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from gj_province
     where province_id = #{provinceId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.peait.spider.entity.GjProvince">
-    insert into gj_province (province_id, province_name)
-    values (#{provinceId,jdbcType=VARCHAR}, #{provinceName,jdbcType=VARCHAR})
+    insert into gj_province (province_id, province_name, update_status, 
+      query_url)
+    values (#{provinceId,jdbcType=VARCHAR}, #{provinceName,jdbcType=VARCHAR}, #{updateStatus,jdbcType=INTEGER}, 
+      #{queryUrl,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.peait.spider.entity.GjProvince">
     insert into gj_province
@@ -31,6 +41,12 @@
       <if test="provinceName != null">
         province_name,
       </if>
+      <if test="updateStatus != null">
+        update_status,
+      </if>
+      <if test="queryUrl != null">
+        query_url,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="provinceId != null">
@@ -38,6 +54,12 @@
       </if>
       <if test="provinceName != null">
         #{provinceName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateStatus != null">
+        #{updateStatus,jdbcType=INTEGER},
+      </if>
+      <if test="queryUrl != null">
+        #{queryUrl,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -47,12 +69,20 @@
       <if test="provinceName != null">
         province_name = #{provinceName,jdbcType=VARCHAR},
       </if>
+      <if test="updateStatus != null">
+        update_status = #{updateStatus,jdbcType=INTEGER},
+      </if>
+      <if test="queryUrl != null">
+        query_url = #{queryUrl,jdbcType=VARCHAR},
+      </if>
     </set>
     where province_id = #{provinceId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.peait.spider.entity.GjProvince">
     update gj_province
-    set province_name = #{provinceName,jdbcType=VARCHAR}
+    set province_name = #{provinceName,jdbcType=VARCHAR},
+      update_status = #{updateStatus,jdbcType=INTEGER},
+      query_url = #{queryUrl,jdbcType=VARCHAR}
     where province_id = #{provinceId,jdbcType=VARCHAR}
   </update>
 </mapper>

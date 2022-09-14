@@ -1,5 +1,8 @@
 package com.peait.spider.entity;
 
+import lombok.Data;
+
+@Data
 public class GjStreet {
     private String streetId;
 
@@ -7,27 +10,9 @@ public class GjStreet {
 
     private String streetName;
 
-    public String getStreetId() {
-        return streetId;
-    }
+    private Integer updateStatus;
 
-    public void setStreetId(String streetId) {
-        this.streetId = streetId == null ? null : streetId.trim();
-    }
+    private String queryUrl;
 
-    public String getDistrictId() {
-        return districtId;
-    }
 
-    public void setDistrictId(String districtId) {
-        this.districtId = districtId == null ? null : districtId.trim();
-    }
-
-    public String getStreetName() {
-        return streetName;
-    }
-
-    public void setStreetName(String streetName) {
-        this.streetName = streetName == null ? null : streetName.trim();
-    }
 }

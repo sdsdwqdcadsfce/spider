@@ -8,5 +8,9 @@ public class GjProvince {
 
     private String provinceName;
 
+    private Integer updateStatus;
+
+    private String queryUrl;
+
 
 }

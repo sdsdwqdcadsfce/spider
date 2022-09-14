@@ -42,6 +42,6 @@
         </javaClientGenerator>
 
 <!--        java -jar mybatis-generator-core-1.3.5.jar -configfile generatorConfig.xml -overwrite-->
-        <table domainObjectName="GjVillagetr" tableName="gj_villagetr" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
+        <table domainObjectName="GjStreet" tableName="gj_street" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
     </context>
 </generatorConfiguration>
